@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "required": ["id", "shots"], "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[0-9]{4}$"},
+    "shots": {"type": "array", "items": {"type": "object", "additionalProperties": false,
+      "required": ["shot_id", "timestamp", "boundary", "assets_reviewed", "shot_scale", "camera_angle", "composition", "depth_of_field", "camera_motion", "lighting", "subjects", "food_morphology", "environment", "captions", "observation_result", "uncertainty"],
+      "properties": {
+        "shot_id": {"type": "string"}, "timestamp": {"type": "string"},
+        "boundary": {"enum": ["hard_cut", "gradual_transition", "continuation", "unknown"]},
+        "assets_reviewed": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "shot_scale": {"type": "string"}, "camera_angle": {"type": "string"},
+        "composition": {"type": "array", "items": {"type": "string"}},
+        "depth_of_field": {"type": "string"}, "camera_motion": {"type": "string"},
+        "lighting": {"type": "object"}, "subjects": {"type": "array"},
+        "food_morphology": {"type": "array"}, "environment": {"type": "object"},
+        "captions": {"type": "array"}, "observation_result": {"type": "string"},
+        "uncertainty": {"type": ["string", "null"]}
+      }}},
+    "coverage": {"type": "object"}
+  }
+}

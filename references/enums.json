@@ -1,0 +1,141 @@
+{
+  "_comment": "枚举值单一事实源。output-schema.md / understand-prompt.md 的取值表与本文件必须一致；validate_corpus.py 直接读本文件做机械校验。改枚举只改这里。",
+
+  "content_type": ["探店", "表态", "无关"],
+
+  "processing_status": ["完整", "完成待修订", "降级-纯转写", "待确认", "失败", "无关"],
+  "_comment_processing_status": "全中文，不得中英混写。`完整` 仅在 validate_corpus.py 零 BLOCK 时可写；有 BLOCK 一律 `完成待修订`。",
+
+  "source_type": ["blogger_explicit", "blogger_hypothesis", "model_inference", "externally_verified"],
+
+  "source_type_blogger_only": ["blogger_explicit", "blogger_hypothesis"],
+  "_comment_source_type_blogger_only": "**收窄枚举**：candidate_patterns 与 values_triggered 只接受这两个值。它们是下游直接吸收的事实源（候选规律进跨期归并、价值观红线单期即可确认），模型自己的推断混进去等于把猜测升格为专家画像的组成部分。红线的污染影响比候选规律更大——B1 至少还带 not_stable_rule 免责声明和跨期验证要求，而红线按防抖阈值『≥1次明确表态+行为一致』单期就能立。模型推断请写进 B7 开放解释与竞争性解释。校验码：B1_MODEL_INFERENCE / VALUES_MODEL_INFERENCE。",
+
+  "scope": ["this_serving", "this_restaurant", "dish_type", "brand_chain"],
+  "scope_requires_quote": ["this_restaurant", "dish_type", "brand_chain"],
+
+  "evidence_source": ["audio", "visual", "both", "inference"],
+  "_comment_evidence_source": "禁止 visual+audio / audio+visual 这类组合变体——两者皆有时填 both。",
+
+  "visual_status": ["reviewed_video", "reviewed_frames", "audio_only", "unreadable"],
+  "_comment_visual_status": "每个 A1 时间段必填：reviewed_video=实际连续观看该段；reviewed_frames=只看了该段抽样帧；audio_only=未检查画面；unreadable=检查过但无法辨认。不得用 audio_only 内容生成镜头/花字/动作事实。",
+
+  "visual_evidence_level": ["direct_video", "frame_sequence", "single_frame", "audio_timeline", "editorial_inference"],
+  "_comment_visual_evidence_level": "视觉/声画声明的证据等级。动作、反应序列和蒙太奇需 direct_video 或 frame_sequence；single_frame 只能证明静态事实；audio_timeline 只能描述口播结构；editorial_inference 是对剪辑意图的解释，不是画面事实。",
+
+  "caption_readability": ["verified", "partially_readable", "unreadable", "not_present", "not_reviewed"],
+  "_comment_caption_readability": "花字状态：只有 verified 可逐字进入 [花字] 与价格事实；partially_readable/unreadable 进 A6 待复核；not_reviewed 不得猜花字。",
+
+  "confidence": ["high", "medium", "low"],
+
+  "sentiment_dish": ["强烈正面", "正面", "中性", "有保留", "负面", "强烈负面"],
+  "_comment_sentiment_dish": "v4 与 assessment_dimension 统一为六级。v3 曾刻意让 dishes 用五级（无『有保留』）、A 档用六级，实测这是单一最高产的枚举错误（46 条越界里 7 条是 dishes 填『有保留』）——而 schema 从未说明为何要有这个差异。『这道菜挺好吃但太咸』确实是有保留，强行归入正面或负面都失真。两个键名保留，取值相同。",
+
+  "assessment_dimension": ["强烈正面", "正面", "中性", "有保留", "负面", "强烈负面"],
+  "_comment_assessment_dimension": "六级，A 档 assessment/overall/verdict 用。与 sentiment_dish 同表。",
+
+  "object_level": ["整道菜", "组成部分", "食材", "技法", "分量", "价格"],
+
+  "intensity": ["强", "中", "弱", "无"],
+  "_comment_intensity": "`无` 仅用于 reaction_type=无反应。",
+
+  "reaction_type": ["明确评论", "微反应", "无反应"],
+
+  "dimension": ["D6环境", "D8服务", "D9卫生", "D11呈现", "D12私密社交"],
+  "_comment_dimension": "B 档五个，逐字。写成 D9卫生/安全、D1口味、D15价格 都会在汇总时分裂成新组。",
+
+  "value_type": ["红线", "候选倾向"],
+
+  "shop_tier": ["大排档", "小馆", "正餐", "高端", "米其林黑珍珠"],
+
+  "price_tier": ["<150", "150-400", "400-800", "800-2000", "2000+"],
+
+  "cuisine": [
+    "本帮菜", "川菜", "粤菜", "日料", "火锅", "烧烤", "西餐", "面食小吃",
+    "烤鸭", "海鲜", "西北菜", "淮扬菜", "东北菜", "鲁菜", "云贵菜", "湘菜",
+    "东南亚", "自助餐", "融合菜",
+    "湖北菜", "徽菜", "闽菜", "客家菜", "新疆菜", "韩餐", "北京菜",
+    "家常菜", "小吃综合", "甜品烘焙", "其他"
+  ],
+  "_comment_cuisine": "v4.3 补 11 项并加 `其他` 逃生口。补的依据是实测：0003 是湖北菜馆、0008 是小吃综合，两者都不在 v4 闭集里且没有逃生口——**模型无论填什么都是 BLOCK**，这是闭集的缺口，不是模型的错。填 `其他` 时应在 B4 记一笔实际菜系，供后续回补。注意仍是**菜系级**粒度：不要写 `湖北菜·家常馆`（掺了店型）或 `小吃/综合`（斜杠组合），前者填 `湖北菜`、后者填 `小吃综合`。",
+
+  "asr_basis": ["画面", "上下文", "存疑保留"],
+
+  "asr_confidence": ["高", "中", "低"],
+
+  "md_required_h2": ["## A. 还原层", "## B. 提炼层", "## C. ASR 纠错清单"],
+  "_comment_md_required_h2": "逐字，注意 ASR 与 纠错 之间有一个空格。合并脚本按标题定位。",
+
+  "md_allowed_h3": [
+    "### A1 逐段记录",
+    "### A2 B档维度事件",
+    "### A3 整体环境观感",
+    "### A4 C档顺带记录",
+    "### A5 价格交叉校验",
+    "### A6 附录·未定用途的画面观察",
+    "### A7 无反应自检",
+    "### A8 镜头时长分配",
+    "### A9 镜头与声画关系",
+    "### A10 反应序列与可观察机会",
+    "### A11 三种注意力分配",
+    "### A12 判断弧线",
+    "### A13 本期判断事件",
+    "### A14 比较、转折与言行张力",
+    "### A15 本期推理链",
+    "### B1 候选规律",
+    "### B2 价值观与红线",
+    "### B3 方法论线索",
+    "### B4 表达DNA素材",
+    "### B4 其他观察",
+    "### B5 原始感官措辞与细粒度描述",
+    "### B6 品味谱系与个人经验",
+    "### B7 开放解释与竞争性解释"
+  ],
+  "_comment_md_allowed_h3": "探店类 A/B 区小节标题白名单（允许标题后追加括注）。A1-A8 沿用原还原结构；A9-A15 是丰富性优先新增的视听判断过程层，均为必填扫描；B3-B7 承接方法论、表达DNA、原始感官措辞、品味谱系和开放解释。旧产物可读取，但新产物不得以安全为由省略这些丰富性小节。",
+
+  "md_allowed_h3_statement": [
+    "### A1 逐段记录",
+    "### B1 价值观与红线",
+    "### B2 内在张力",
+    "### B3 表达DNA素材",
+    "### B4 沉默边界",
+    "### B5 其他观察",
+    "### B6 视听表达过程",
+    "### B7 原始表达样本"
+  ],
+  "_comment_md_allowed_h3_statement": "表态类（content_type=表态）白名单，取自 understand-prompt-statement.md 的模板。v3 漏了这张表，校验器对表态类一律套探店白名单——按自己的 prompt 写就必然吃 5 个 MD_H3_DIVERGED，且无法修。",
+
+  "md_required_h2_statement": ["## A. 还原层", "## B. 提炼层", "## C. ASR 纠错清单"],
+
+  "forbidden_causality": [
+    "导致", "造成", "由于", "因为", "证明", "确定为", "使用了", "所致", "系因"
+  ],
+  "_comment_forbidden_causality": "source_type 为 blogger_hypothesis / model_inference 时，reason 与 claim 不得出现——推测不能写成确定归因。blogger_explicit / externally_verified 不受此限（工艺描述里的『导致』是合法的）。",
+
+  "forbidden_pattern_phrases": [
+    "是……的标尺", "的标尺", "标尺", "标志性", "定海神针", "优先点", "不要点",
+    "必点", "通病", "一定是", "凡是", "都是这样", "普遍",
+    "核心标尺", "核心评价指标", "核心判断", "评判标准", "坐标系",
+    "具有稳定性", "表现稳定", "稳定偏好", "一贯", "始终",
+    "判断体系", "评价体系", "方法论是"
+  ],
+  "_comment_forbidden_pattern_phrases": "B1 候选规律与 d10_ordering.strategy_notes 禁用——单期样本不得写成稳定结论。v4.4 补 12 项：原表只有 `的标尺`，而实跑写的是 `核心标尺`（差一个字就绕过）、`核心评价指标`、`具有稳定性`、`表现稳定`、`参照标尺`、`坐标系`。这类词的共同点是**把单期观察表述成人格属性或稳定方法论**——恰恰是防抖阈值规定「≥2 期才是决策启发式、≥3 期才是心智模型」要拦的。正确写法是描述本期发生了什么 + 待跨期验证，例如『本期在鸭肝慕斯的评价中博主主动数出多个口感层次；是否为其稳定评价维度待验证』。",
+
+  "technical_attribution_terms": [
+    "嫩肉粉", "松肉粉", "食用碱", "碱发", "保水剂", "磷酸盐", "复合磷酸盐",
+    "亚硝酸盐", "预制菜", "添加剂", "工业半成品", "石粉", "硼砂", "增稠剂"
+  ],
+  "_comment_technical_attribution_terms": "餐饮技术归因禁区。这些词只有在博主亲口说出（或 ASR 纠错后的『纠正后』值命中）时才可写入 blogger_explicit / blogger_hypothesis；否则只能另起一条 model_inference，且不得进入 candidate_patterns / values / 跨期统计。",
+
+  "industry_knowledge_markers": [
+    "典型特征", "典型做法", "标准做法", "经典做法", "正宗做法", "行业惯例",
+    "一般来说", "通常来说", "众所周知", "常见做法", "按行业", "业内"
+  ],
+  "_comment_industry_knowledge_markers": "[推断] 行禁用。v4.3 之前 [推断] 行对 TECH_TERM 检查是**无条件豁免**的——只要标上 [推断] 就什么都能写，于是行业常识以『推断』的身份混进了博主的判断材料。实测 0001 L32『微甜、香油重为本帮菜典型特征』：这是模型的餐饮知识，不是本期博主说的任何话。[推断] 的定义是「基于已列语音/画面的解释，且必须注明依据」——依据只能是本期素材，不能是模型的先验知识。命中即 INFERENCE_IS_INDUSTRY_KNOWLEDGE。",
+
+  "inference_markers": [
+    "明显", "疑似", "可能是", "可能与", "说明", "暗示", "似乎", "应该是",
+    "看得出", "显然", "推测", "像是", "估计"
+  ],
+  "_comment_inference_markers": "[画面] / [花字] 行内出现即为观察与解读混写——须移入 [推断] 并注明依据。"
+}

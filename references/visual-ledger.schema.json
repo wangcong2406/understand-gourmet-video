@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "required": ["id", "evidence"], "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[0-9]{4}$"},
+    "evidence": {"type": "array", "items": {"type": "object", "additionalProperties": false,
+      "required": ["evidence_id", "shot_refs", "timestamp", "category", "observable", "assets_reviewed", "episode_refs", "relation", "interpretations", "limits"],
+      "properties": {
+        "evidence_id": {"type": "string"}, "shot_refs": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "timestamp": {"type": "string"},
+        "category": {"enum": ["food_morphology", "environment", "composition", "lighting", "focus", "caption", "other"]},
+        "observable": {"type": "string"}, "assets_reviewed": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "episode_refs": {"type": "array", "items": {"type": "string"}},
+        "relation": {"type": ["string", "null"]},
+        "interpretations": {"type": "array", "items": {"type": "object", "required": ["interpretation", "support", "limits"]}},
+        "limits": {"type": ["string", "null"]}
+      }} }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "version": "flash.2",
+  "baseline_rule": "0011-0030 的视觉事实为不可丢下限；专业术语、OCR行数和全文长度不构成胜出。",
+  "baseline_examples": {
+    "0011": ["食物被掰开后内部红豆颗粒可见", "手持食物展示并品尝", "打包挤压造成品相变化", "甜度评价前后可见反应"],
+    "0014": ["多对象画面覆盖", "菜品特写与人物反应关联"],
+    "0017": ["多菜正餐逐菜动作与画面分化"],
+    "0019": ["高端菜内部结构、技术相关可见证据"],
+    "0028": ["复杂多菜覆盖与对象切换"],
+    "0030": ["短视频高密度时间线与反应窗口"]
+  },
+  "calibration": {
+    "0002": {"required_lenses": ["food_morphology", "basic_actions", "service_event", "environment", "shot_edit", "sound"]},
+    "0006": {"required_lenses": ["food_cross_section", "surface_texture", "bite_or_break_action", "reaction", "opening_closing_callback", "sound"]},
+    "0009": {"required_lenses": ["multi_location", "transitions", "camera_motion", "street_environment", "multi_food_actions", "sound_bridge", "rhythm"]}
+  },
+  "acceptance": {
+    "hard_fact_precision": 1.0,
+    "generic_detector_ratio_max": 0.2,
+    "main_dish_food_morphology_coverage_min": 0.8,
+    "judgment_event_action_coverage_min": 0.8,
+    "reaction_window_continuous_coverage_min": 0.8,
+    "shot_language_coverage_min": 0.8,
+    "sound_event_coverage_min": 0.6,
+    "editing_relation_coverage_min": 0.6,
+    "video_unique_fact_ratio_min": 0.5
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "required": ["id", "windows"], "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[0-9]{4}$"},
+    "windows": {"type": "array", "items": {"type": "object", "additionalProperties": false,
+      "required": ["window_id", "episode_refs", "timestamp", "input_mode", "sample_fps", "assets_reviewed", "face_visibility", "baseline", "actions", "microreactions", "camera_motion", "observation_result", "not_observable", "confidence"],
+      "properties": {
+        "window_id": {"type": "string"}, "episode_refs": {"type": "array", "items": {"type": "string"}},
+        "timestamp": {"type": "string"}, "input_mode": {"enum": ["continuous_video", "dense_frames"]},
+        "sample_fps": {"type": "number", "minimum": 8}, "assets_reviewed": {"type": "array", "items": {"type": "string"}, "minItems": 2},
+        "face_visibility": {"type": "string"}, "baseline": {"type": ["object", "null"]},
+        "actions": {"type": "array", "items": {"type": "object", "required": ["event_id", "actor", "action", "onset", "apex_or_steps", "offset", "object_or_tool", "direction", "speed", "magnitude", "count", "result_state", "visibility"]}},
+        "microreactions": {"type": "array", "items": {"type": "object", "required": ["event_id", "region_actions", "onset", "apex", "offset", "intensity", "visibility", "interpretations", "support", "limits"]}},
+        "camera_motion": {"type": "array"}, "observation_result": {"type": "string"},
+        "not_observable": {"type": "array"}, "confidence": {"enum": ["high", "medium", "low"]}
+      }} }
+  }
+}

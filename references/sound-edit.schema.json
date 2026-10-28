@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "required": ["id", "shots", "sound_events", "editing_relations"], "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[0-9]{4}$"},
+    "shots": {"type": "array", "items": {"type": "object", "required": ["shot_id", "timestamp", "duration_sec", "transition_in", "transition_out"]}},
+    "sound_events": {"type": "array", "items": {"type": "object", "required": ["event_id", "timestamp", "sound_type", "source", "observable_change", "relation_to_image", "evidence_level"]}},
+    "editing_relations": {"type": "array", "items": {"type": "object", "required": ["relation_id", "from_shot", "to_shot", "relation_type", "cut_alignment", "observable", "episode_refs", "interpretations", "limits"]}},
+    "rhythm_summary": {"type": "object"}
+  }
+}
